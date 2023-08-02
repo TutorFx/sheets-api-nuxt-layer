@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       valueInputOption: "USER_ENTERED",
       resource: {
         values: [
-          [body.nome, body.celular, body.email, new Date, ip, city, state, host]
+          [body.nome, body.celular, body.email, body.message, new Date, ip, city, state, host]
         ]
       }
     });
