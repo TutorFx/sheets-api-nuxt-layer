@@ -1,7 +1,15 @@
 import { google } from 'googleapis';
 
 export default defineEventHandler(async (event) => {
+  const host = getHeader(event, 'host')
+  const cityHeader = getHeader(event, 'x-vercel-ip-city')
+  const city = cityHeader ? decodeURIComponent(cityHeader) : '-'
+  const stateHeader = getHeader(event, 'x-vercel-ip-country-region')
+  const state = stateHeader ? decodeURIComponent(stateHeader) : '-'
+  const ipHeader = getHeader(event, 'x-forwarded-for')
+  const ip = ipHeader ? ipHeader.split(',')[0] : '-'
   const body = await readBody(event);
+
 
   try {
     const auth = new google.auth.JWT(
@@ -19,7 +27,7 @@ export default defineEventHandler(async (event) => {
       valueInputOption: "USER_ENTERED",
       resource: {
         values: [
-          [body.nome, body.celular, body.email, new Date]
+          [body.nome, body.celular, body.email, new Date, ip, city, state, host]
         ]
       }
     });
